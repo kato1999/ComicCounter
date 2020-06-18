@@ -1,12 +1,10 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from wsgiref import simple_server
-import sqlite3
 import sys
 
-from wsgiref.util import request_uri
-from six.moves import urllib
+import pathlib
+from collections import defaultdict
 
 # CGIモジュールをインポート
 import cgi
@@ -14,6 +12,7 @@ import cgitb
 cgitb.enable()
 
 # sqlite3（SQLサーバ）モジュールをインポート
+import sqlite3
 
 # データベースファイルのパスを設定
 dbname = 'database.db'
@@ -29,22 +28,46 @@ cur.close()
 con.close()
 
 
-#ファイル読み込み用の関数
-#<link~>ではなぜかhtmlファイルとして読み込まれる
-def read_file(file_name):
-    with open(file_name,mode="r")as file:
-        return file.read()
+#拡張子に応じたファイルを返すための準備
+CONTENT_TYPE = defaultdict(lambda: 'application/octed-stream')
+CONTENT_TYPE.update({
+        '.html': 'text/html; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json',
+        '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif',
+        '.css':'text/css'
+    }
+)
 
-def application(environ, start_response):
+
+
+def application(environ,start_response):
+    
+    #拡張子の取得
+    filepath = '.' + environ['PATH_INFO']
+    extention = pathlib.Path( filepath ).suffix
+    
+    # 「GET (HTML以外のファイル)」であればファイルの中身をそのまま返す(.icoは無視)
+    # 拡張子がリスト内にあるかどうかで判定
+    extention_li = [".css", ".jpeg", ".jpg", ".png", ".txt"]
+    if ( extention in extention_li):
+        headers = [('Content-type', CONTENT_TYPE[extention])]
+        if (filepath!="./favicon.ico"):
+            with open(filepath,mode='br') as f:
+                data = f.read()
+
+            start_response('200 OK', headers)
+            return [bytes(data)]
+
+    # localhost または index.html 
     # HTML（共通ヘッダ部分）
-    html =  read_file("./index.html")
-    html += read_file("./test.css")
-    html += '-->\n'\
-            '</style>\n'\
-            '</head>\n'
+    html = '<html lang="ja">\n' \
+           '<head>\n' \
+           '<meta charset="UTF-8">\n' \
+           '<title>WSGI テスト</title>\n' \
+           '<link rel="stylesheet" href="app.css">\n' \
+           '</head>\n'
 
     # フォームデータを取得
-    form = cgi.FieldStorage(environ=environ, keep_blank_values=True)
+    form = cgi.FieldStorage(environ=environ,keep_blank_values=True)
     if ('v1' not in form) or ('v2' not in form):
         # 入力フォームの内容が空の場合（初めてページを開いた場合も含む）
 
@@ -72,7 +95,7 @@ def application(environ, start_response):
 
         # SQL文（insert）の作成と実行
         sql = 'insert into users (id, name) values (?,?)'
-        cur.execute(sql, (int(v1), v2))
+        cur.execute(sql, (int(v1),v2))
         con.commit()
 
         # SQL文（select）の作成
@@ -88,19 +111,18 @@ def application(environ, start_response):
                 '</div>\n' \
                 '<a href="/">登録ページに戻る</a>\n' \
                 '</body>\n'
-        
-        html += urllib.parse.unquote(request_uri(environ, include_query=True))
 
         # カーソルと接続を閉じる
         cur.close()
         con.close()
-    p = environ['PATH_INFO']
-    html += p+'\n'
-    # html = html.encode('utf-8')
+
+
+    html += '</html>\n'
+    html = html.encode('utf-8')
 
     # レスポンス
     start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
-                              ('Content-Length', str(len(html)))])
+        ('Content-Length', str(len(html))) ])
     return [html]
 
 
@@ -110,6 +132,7 @@ def application(environ, start_response):
 #  このサンプルの動作が確認できる．
 #  コマンドライン引数にポート番号を指定（python3 test_wsgi.py ポート番号）した場合は，
 #  http://localhost:ポート番号 にアクセスする．
+from wsgiref import simple_server
 if __name__ == '__main__':
     port = 8080
     if len(sys.argv) == 2:
@@ -117,3 +140,4 @@ if __name__ == '__main__':
 
     server = simple_server.make_server('', port, application)
     server.serve_forever()
+
