@@ -1,7 +1,68 @@
-.form1{
-    color: aqua;
+body{
+	background-color: rgb(214, 255, 209);
+	font-family: sans-serif;
+	margin: 10px;
 }
 
-body{
-    background-color: lightgreen;
+h1{
+	text-align: center;
+}
+
+.tab-wrap {
+	max-width: 90%;
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tab-wrap:after {
+	content: '';
+	width: 100%;
+	height: 6px;
+	background: darkgreen;
+	display: block;
+	order: -1;
+}
+
+.tab-label {
+	color: White;
+	background: LightGray;
+	font-weight: bold;
+	text-align: center;
+	padding: 10px .5em;
+	order: -1;
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
+	border-radius: 5px 5px 0 0;
+	flex: 1;
+}
+
+.tab-label:not(:last-of-type) {
+	margin-right: 5px;
+}
+
+.tab-content {
+	width: 100%;
+	background-color: rgb(250,250,250);
+	height: 0;
+	overflow: hidden;
+}
+
+/* アクティブなタブ */
+.tab-switch:checked+.tab-label {
+	background: darkgreen;
+}
+
+.tab-switch:checked+.tab-label+.tab-content {
+	height: auto;
+	overflow: auto;
+	padding: 15px;
+	opacity: 1;
+	box-shadow: 0 0 3px rgba(0,0,0,.2);
+}
+
+/* ラジオボタン非表示 */
+.tab-switch {
+	display: none;
 }

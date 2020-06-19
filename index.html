@@ -1,7 +1,25 @@
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<title>WSGI テスト</title>
-<link rel="stylesheet" href="default.css">
-<style type="text/css">
-<!--
+    <meta charset="UTF-8">
+    <title>{title}</title>
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+    <h1>本の管理</h1>
+    <div class="tab-wrap">
+        <input id="TAB-01" type="radio" name="TAB" class="tab-switch" checked="checked" /><label class="tab-label" for="TAB-01">本の一覧・検索</label>
+        <div class="tab-content">
+            {body1}
+        </div>
+        <input id="TAB-02" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-02">あああ</label>
+        <div class="tab-content">
+            コンテンツ 2
+        </div>
+        <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトの説明</label>
+        <div class="tab-content">
+            このサイトの説明
+        </div>
+    </div>
+
+</body>
+</html>

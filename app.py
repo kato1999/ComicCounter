@@ -51,20 +51,17 @@ def application(environ,start_response):
     if ( extention in extention_li):
         headers = [('Content-type', CONTENT_TYPE[extention])]
         if (filepath!="./favicon.ico"):
-            with open(filepath,mode='br') as f:
-                data = f.read()
+            with open(filepath,mode='br') as file:
+                data = file.read()
 
             start_response('200 OK', headers)
             return [bytes(data)]
 
     # localhost または index.html 
     # HTML（共通ヘッダ部分）
-    html = '<html lang="ja">\n' \
-           '<head>\n' \
-           '<meta charset="UTF-8">\n' \
-           '<title>WSGI テスト</title>\n' \
-           '<link rel="stylesheet" href="app.css">\n' \
-           '</head>\n'
+    with open("index.html",mode="r") as file:
+        html = file.read()
+    content = ""
 
     # フォームデータを取得
     form = cgi.FieldStorage(environ=environ,keep_blank_values=True)
@@ -72,15 +69,13 @@ def application(environ,start_response):
         # 入力フォームの内容が空の場合（初めてページを開いた場合も含む）
 
         # HTML（入力フォーム部分）
-        html += '<body>\n' \
-                '<div class="form1">\n' \
-                '<form>\n' \
-                '学生番号（整数） <input type="text" name="v1"><br>\n' \
-                '氏名　（文字列） <input type="text" name="v2"><br>\n' \
-                '<input type="submit" value="登録">\n' \
-                '</form>\n' \
-                '</div>\n' \
-                '</body>\n'
+        content +=  '<div class="form1">\n' \
+                    '<form>\n' \
+                    '学生番号（整数） <input type="text" name="v1"><br>\n' \
+                    '氏名　（文字列） <input type="text" name="v2"><br>\n' \
+                    '<input type="submit" value="登録">\n' \
+                    '</form>\n' \
+                    '</div>\n'
     else:
         # 入力フォームの内容が空でない場合
 
@@ -102,22 +97,20 @@ def application(environ,start_response):
         sql = 'select * from users'
 
         # SQL文の実行とその結果のHTML形式への変換
-        html += '<body>\n' \
-                '<div class="ol1">\n' \
-                '<ol>\n'
+        content +=  '<div class="ol1">\n' \
+                    '<ol>\n'
         for row in cur.execute(sql):
-            html += '<li>' + str(row[0]) + ',' + row[1] + '</li>\n'
-        html += '</ol>\n' \
-                '</div>\n' \
-                '<a href="/">登録ページに戻る</a>\n' \
-                '</body>\n'
+            content += '<li>' + str(row[0]) + ',' + row[1] + '</li>\n'
+        content +=  '</ol>\n' \
+                    '</div>\n' \
+                    '<a href="/">登録ページに戻る</a>\n'
+                
 
         # カーソルと接続を閉じる
         cur.close()
         con.close()
 
-
-    html += '</html>\n'
+    html = html.format(body1 = content , title = "本の情報")
     html = html.encode('utf-8')
 
     # レスポンス
