@@ -21,7 +21,7 @@ dbname = 'database.db'
 # テーブルの作成
 con = sqlite3.connect(dbname)
 cur = con.cursor()
-create_table = 'create table if not exists users (id int, name varchar(64))'
+create_table = 'create table if not exists books(number int, title text, company text, author text, year int, month int, date int )'
 cur.execute(create_table)
 con.commit()
 cur.close()
@@ -45,6 +45,7 @@ def application(environ,start_response):
     filepath = '.' + environ['PATH_INFO']
     extention = pathlib.Path( filepath ).suffix
     
+
     # 「GET (HTML以外のファイル)」であればファイルの中身をそのまま返す(.icoは無視)
     # 拡張子がリスト内にあるかどうかで判定
     extention_li = [".css", ".jpeg", ".jpg", ".png", ".txt"]
@@ -57,58 +58,118 @@ def application(environ,start_response):
             start_response('200 OK', headers)
             return [bytes(data)]
 
-    # localhost または index.html 
-    # HTML（共通ヘッダ部分）
-    with open("index.html",mode="r") as file:
-        html = file.read()
-    content = ""
 
-    # フォームデータを取得
     form = cgi.FieldStorage(environ=environ,keep_blank_values=True)
-    if ('v1' not in form) or ('v2' not in form):
-        # 入力フォームの内容が空の場合（初めてページを開いた場合も含む）
 
-        # HTML（入力フォーム部分）
-        content +=  '<div class="form1">\n' \
-                    '<form>\n' \
-                    '学生番号（整数） <input type="text" name="v1"><br>\n' \
-                    '氏名　（文字列） <input type="text" name="v2"><br>\n' \
-                    '<input type="submit" value="登録">\n' \
-                    '</form>\n' \
-                    '</div>\n'
-    else:
-        # 入力フォームの内容が空でない場合
-
+    # ==============
+    # SQLへの追加操作
+    # ==============
+    if ('v1' in form) and (filepath=="./add"):
         # フォームデータから各フィールド値を取得
-        v1 = form.getvalue("v1", "0")
-        v2 = form.getvalue("v2", "0")
+        title = form.getvalue("v1", "0")
+        author = form.getvalue("v2", "0")
+        company = form.getvalue("v3", "0")
+        year = form.getvalue("v4", "0")
 
         # データベース接続とカーソル生成
         con = sqlite3.connect(dbname)
         cur = con.cursor()
         con.text_factory = str
 
+        # 現在最大の管理番号+1を次の管理番号にする。
+        # 現在最大の管理番号の取得
+        sql = 'select max(number) from books'
+        cur.execute(sql)
+        num = cur.fetchall()
+
+        # データがない場合には最大の管理番号を0にする。
+        if num[0][0] is None:
+            num = [[0]]
+        print(num)
+
         # SQL文（insert）の作成と実行
-        sql = 'insert into users (id, name) values (?,?)'
-        cur.execute(sql, (int(v1),v2))
+        sql = 'insert into books (number, title , company, author, year, month, date) values (?,?,?,?,?,?,?)'
+        cur.execute(sql, (int(num[0][0])+1, title ,company,author,int(year),0,0))
         con.commit()
 
-        # SQL文（select）の作成
-        sql = 'select * from users'
-
-        # SQL文の実行とその結果のHTML形式への変換
-        content +=  '<div class="ol1">\n' \
-                    '<ol>\n'
-        for row in cur.execute(sql):
-            content += '<li>' + str(row[0]) + ',' + row[1] + '</li>\n'
-        content +=  '</ol>\n' \
-                    '</div>\n' \
-                    '<a href="/">登録ページに戻る</a>\n'
-                
-
-        # カーソルと接続を閉じる
         cur.close()
         con.close()
+
+        # 一旦別ページ(manage.html)に飛ばす。
+        # リロードした際に重複して追加されるのを防ぐ
+        with open("manage.html",mode="r") as file:
+            html = file.read()
+            html = html.encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
+        ('Content-Length', str(len(html))) ])
+        return [html]
+
+
+
+    # ============
+    # SQLの削除操作
+    # ==============
+    if (filepath=="./delete"):
+        # フォームデータから各フィールド値を取得
+        # nameは1で固定してある。
+        delete_number = form.getlist("1")
+
+        # データベース接続とカーソル生成
+        con = sqlite3.connect(dbname)
+        cur = con.cursor()
+        con.text_factory = str
+        
+        for i in delete_number:
+            sql = 'delete from books where number = ?'
+            cur.execute(sql, (i))
+            con.commit()
+
+        cur.close()
+        con.close()
+
+        # 一旦別ページ(manage.html)に飛ばす。
+        # リロードした際に重複して削除されるのを防ぐ
+        with open("manage.html",mode="r") as file:
+            html = file.read()
+            html = html.encode('utf-8')
+        start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
+        ('Content-Length', str(len(html))) ])
+        return [html]
+
+
+
+
+
+    # localhost または index.html 
+    # HTML（共通ヘッダ部分）
+    with open("index.html",mode="r") as file:
+        html = file.read()
+    
+    content = ""
+
+    # フォームデータを取得
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    con.text_factory = str
+
+    # SQL文（select）の作成
+    sql = 'select * from books'
+
+    # SQL文の実行とその結果のHTML形式への変換
+    for row in cur.execute(sql):
+        content +=  '<tr>\n'\
+                    '<td class="td1"><input type="checkbox"   name="1" value="'+ str(row[0]) +'"></td>\n'
+        for i in range(1, len(row)-2):
+            if not(row[i] is None):
+                content +=  '<td>'+str(row[i])+'</td>\n'
+            else:
+                content +=  '<td>未定義</td>\n'
+        content += '</tr>\n'
+
+
+    # カーソルと接続を閉じる
+    cur.close()
+    con.close()
 
     html = html.format(body1 = content , title = "本の情報")
     html = html.encode('utf-8')

@@ -66,3 +66,66 @@ h1{
 .tab-switch {
 	display: none;
 }
+
+
+.booklist{
+	margin: 0 auto;
+	width:100%;
+	height: 60vh;
+	overflow:auto;
+	border: 3pt;
+}
+
+
+
+
+
+
+/* 検索結果用の表デザイン */
+table {
+	border-color: #fd6767;
+	margin: 0 auto;
+	width: 100%;
+	border-bottom: tomato 10px;
+}
+
+table tr {
+	background-color: #fff;
+}
+table tr:nth-child(even){
+	background-color: #eee;
+}
+
+table td {
+	padding: .35em 1em;
+	width: 24%;
+	border-width: 2px; /* 線の太さ */
+}
+.td1{
+	width: 4%;
+	-moz-transform:		scale(1.4);
+	-webkit-transform:	scale(1.4);
+	transform:		scale(1.4);
+}
+
+
+table thead th {
+	font-size: 1em;
+	padding: 0.75em;
+}
+
+table thead tr{
+	background-color: #fd6767;
+	color:#fff;
+}
+
+
+
+
+
+
+
+
+
+
+
