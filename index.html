@@ -1,6 +1,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title}</title>
     <link rel="stylesheet" href="app.css">
 </head>
@@ -20,16 +21,15 @@
             </form>
             <form>
                 <input type="submit" formaction="delete" value="削除" class="btn-gradient-radius">
-                <table rules="none">
-                    <thead>
+                <table rules="all">
+                    
                     <tr>
-                        <th width="4%" scope="col"></th>
-                        <th width="24%" scope="col">作品名</th>
-                        <th width="24%" scope="col">出版社</th>
-                        <th width="24%" scope="col">著者</th>
-                        <th width="24%" scope="col">出版年</th>
+                        <th class="th1" scope="col"></th>
+                        <th class="th2" scope="col">作品名</th>
+                        <th class="th3" scope="col">巻数</th>
+                        <th class="th4" scope="col">コメント</th>
                     </tr>
-                    </thead>
+                    
                 </table>
 
                 <div class="booklist">
@@ -47,10 +47,9 @@
         <div class="tab-content">
             <div class="form1">
                 <form>
-                作品名<input type="text" name="v1"><br>
-                著者<input type="text" name="v2"><br>
-                出版社<input type="text" name="v3"><br>
-                出版年<input type="text" name="v4"><br>
+                タイトル<input type="text" name="v1"><br>
+                巻数<input type="text" name="v2"><br>
+                コメント<input type="text" name="v3"><br>
                 <input type="submit" formaction="insert" value="登録">
                 </form>
             </div>

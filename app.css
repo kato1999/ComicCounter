@@ -95,28 +95,36 @@ table tr:nth-child(even){
 	background-color: #eee;
 }
 
-table td {
+table td{
 	padding: .35em 1em;
-	width: 24%;
 	border-width: 3px; /* 線の太さ */
 }
-.td1{
-	width: 4%;
+
+table th {
+	font-size: 1em;
+	padding: 0.75em 1em;
+	text-align: left;
+	background-color: #68a75e;
+	color:#fff;
+}
+
+.td1, .th1{ width: 8%; }
+.th2, .td2{width: 20%;}
+.th3, .td3{width: 10%;}
+.th4, .td4{width: 60%;}
+
+/* チェックボックスのデザイン */
+.box{
+	text-align: center;
 	-moz-transform:		scale(1.4);
 	-webkit-transform:	scale(1.4);
 	transform:		scale(1.4);
 }
 
 
-table thead th {
-	font-size: 1em;
-	padding: 0.75em;
-}
 
-table thead tr{
-	background-color: #68a75e;
-	color:#fff;
-}
+
+
 
 
 

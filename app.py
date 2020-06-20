@@ -21,7 +21,7 @@ dbname = 'database.db'
 # テーブルの作成
 con = sqlite3.connect(dbname)
 cur = con.cursor()
-create_table = 'create table if not exists books(number int, title text, company text, author text, year int, month int, date int )'
+create_table = 'create table if not exists books(number int, title text, count int, comment text)'
 cur.execute(create_table)
 con.commit()
 cur.close()
@@ -52,9 +52,8 @@ def return_file(filepath, extention, start_response):
 def insert_sql(form, start_response):
     # フォームデータから各フィールド値を取得
     title = form.getvalue("v1", "0")
-    author = form.getvalue("v2", "0")
-    company = form.getvalue("v3", "0")
-    year = form.getvalue("v4", "0")
+    count = form.getvalue("v2", "0")
+    comment = form.getvalue("v3", "0")
 
     con = sqlite3.connect(dbname)
     cur = con.cursor()
@@ -69,8 +68,8 @@ def insert_sql(form, start_response):
     if num[0][0] is None:
         num = [[0]]
 
-    sql = 'insert into books (number, title , company, author, year, month, date) values (?,?,?,?,?,?,?)'
-    cur.execute(sql, (int(num[0][0])+1, title ,company,author,int(year),0,0))
+    sql = 'insert into books (number, title, count, comment) values (?,?,?,?)'
+    cur.execute(sql, (int(num[0][0])+1, title , count, comment))
     con.commit()
 
     cur.close()
@@ -125,19 +124,12 @@ def select_sql(form, start_response):
     con.text_factory = str
 
     search_list = [False for _ in range(4)]
-    sql = 'select * from books where author =? and company=?'
+    sql = 'select * from books where title =?'
 
     if ('v1' in form):
         search_list[0] = form.getvalue("v1", "0")
-    if ('v2' in form):
-        search_list[1] = form.getvalue("v2", "0")
-    if ('v3' in form):
-        search_list[2] = form.getvalue("v3", "0")
-    if ('v4' in form):
-        search_list[3] = form.getvalue("v4", "0")
 
-    
-    cur.execute(sql,(search_list[1],search_list[2]))
+    cur.execute(sql,(search_list[1],))
     list1 = cur.fetchall()
 
     for row in list1:
@@ -165,12 +157,13 @@ def default():
     sql = 'select * from books'
 
     # SQL文の実行とその結果のHTML形式への変換
+    # 表の横幅(%)
     for row in cur.execute(sql):
         content +=  '<tr>\n'\
-                    '<td class="td1"><input type="checkbox"   name="1" value="'+ str(row[0]) +'"></td>\n'
-        for i in range(1, len(row)-2):
+                    '<td class="td1 box"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
+        for i in range(1, len(row)):
             if not(row[i] is None):
-                content +=  '<td>'+str(row[i])+'</td>\n'
+                content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
             else:
                 content +=  '<td>未定義</td>\n'
         content += '</tr>\n'
