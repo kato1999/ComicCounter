@@ -8,28 +8,26 @@
 <body>
     <h1>本の管理</h1>
 
+
     <!-- 検索・削除画面 -->
     <div class="tab-wrap">
         <input id="TAB-01" type="radio" name="TAB" class="tab-switch" checked="checked" /><label class="tab-label" for="TAB-01">本の一覧・検索</label>
         <div class="tab-content">
-            <form>
-                作品名<input type="text" name="v1"><br>
-                著者<input type="text" name="v2"><br>
-                出版社<input type="text" name="v3"><br>
-                出版年<input type="text" name="v4"><br>
-                <input type="submit" formaction="search" value="検索">
+            <form class="search">
+                    <input type="text" placeholder="検索したい作品名を入力" name="v1">
+                    <input type="submit" class="srch_btn button" formaction="search" value="検索">
             </form>
+
             <form>
-                <input type="submit" formaction="delete" value="削除" class="btn-gradient-radius">
-                <table rules="all">
-                    
+                <input type="submit" formaction="delete" value="削除" class="button dlt_btn">
+                 
+                <table rules="none">
                     <tr>
                         <th class="th1" scope="col"></th>
                         <th class="th2" scope="col">作品名</th>
                         <th class="th3" scope="col">巻数</th>
                         <th class="th4" scope="col">コメント</th>
                     </tr>
-                    
                 </table>
 
                 <div class="booklist">
@@ -42,19 +40,23 @@
             </form>
         </div>
         
+
         <!-- 本の追加 -->
         <input id="TAB-02" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-02">あああ</label>
         <div class="tab-content">
             <div class="form1">
                 <form>
-                タイトル<input type="text" name="v1"><br>
+                作品名<input type="text" name="v1"><br>
                 巻数<input type="text" name="v2"><br>
                 コメント<input type="text" name="v3"><br>
                 <input type="submit" formaction="insert" value="登録">
                 </form>
             </div>
         </div>
-        <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトの説明</label>
+
+
+        <!-- サイトの説明 -->
+        <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトについて</label>
         <div class="tab-content">
             aaa
         </div>

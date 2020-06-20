@@ -123,21 +123,20 @@ def select_sql(form, start_response):
     cur = con.cursor()
     con.text_factory = str
 
-    search_list = [False for _ in range(4)]
     sql = 'select * from books where title =?'
 
     if ('v1' in form):
-        search_list[0] = form.getvalue("v1", "0")
+        search = form.getvalue("v1", "0")
 
-    cur.execute(sql,(search_list[1],))
+    cur.execute(sql,(search,))
     list1 = cur.fetchall()
 
     for row in list1:
         content +=  '<tr>\n'\
-                    '<td class="td1"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
-        for i in range(1, len(row)-2):
+                    '<td class="td1 box"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
+        for i in range(1, len(row)):
             if not(row[i] is None):
-                content +=  '<td>'+str(row[i])+'</td>\n'
+                content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
             else:
                 content +=  '<td>未定義</td>\n'
         content += '</tr>\n'
