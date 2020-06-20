@@ -1,5 +1,5 @@
 body{
-	background-color: rgb(214, 255, 209);
+	background-color: rgb(226, 255, 224);
 	font-family: sans-serif;
 	margin: 10px;
 }
@@ -83,10 +83,9 @@ h1{
 
 /* 検索結果用の表デザイン */
 table {
-	border-color: #fd6767;
+	border-color: #dbe2d9;
 	margin: 0 auto;
 	width: 100%;
-	border-bottom: tomato 10px;
 }
 
 table tr {
@@ -99,7 +98,7 @@ table tr:nth-child(even){
 table td {
 	padding: .35em 1em;
 	width: 24%;
-	border-width: 2px; /* 線の太さ */
+	border-width: 3px; /* 線の太さ */
 }
 .td1{
 	width: 4%;
@@ -115,14 +114,28 @@ table thead th {
 }
 
 table thead tr{
-	background-color: #fd6767;
+	background-color: #68a75e;
 	color:#fff;
 }
 
 
 
 
-
+/* ボタンデザイン */
+.btn-gradient-radius {
+	margin:0 0 5px auto;
+	font-size: 17px;
+	font-weight: bold;
+	display: block;
+	padding: 7px 23px;
+	border: 0em;
+	border-radius: 25px;
+	text-decoration: none;
+	color: #FFF;
+	background-color: red;
+	transition: .4s;
+  }
+  
 
 
 

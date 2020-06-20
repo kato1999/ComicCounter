@@ -110,8 +110,8 @@ def application(environ,start_response):
     # SQLの削除操作
     # ==============
     if (filepath=="./delete"):
-        # フォームデータから各フィールド値を取得
         # nameは1で固定してある。
+        # valueはSQLに保存してある管理番号(number)と同一
         delete_number = form.getlist("1")
 
         # データベース接続とカーソル生成
@@ -119,9 +119,10 @@ def application(environ,start_response):
         cur = con.cursor()
         con.text_factory = str
         
+        print(delete_number)
         for i in delete_number:
             sql = 'delete from books where number = ?'
-            cur.execute(sql, (i))
+            cur.execute(sql, (i,))
             con.commit()
 
         cur.close()
@@ -138,38 +139,68 @@ def application(environ,start_response):
 
 
 
-
-
-    # localhost または index.html 
     # HTML（共通ヘッダ部分）
     with open("index.html",mode="r") as file:
         html = file.read()
-    
     content = ""
 
-    # フォームデータを取得
+    # データベース接続とカーソル生成
     con = sqlite3.connect(dbname)
     cur = con.cursor()
     con.text_factory = str
 
-    # SQL文（select）の作成
-    sql = 'select * from books'
 
-    # SQL文の実行とその結果のHTML形式への変換
-    for row in cur.execute(sql):
-        content +=  '<tr>\n'\
-                    '<td class="td1"><input type="checkbox"   name="1" value="'+ str(row[0]) +'"></td>\n'
-        for i in range(1, len(row)-2):
-            if not(row[i] is None):
-                content +=  '<td>'+str(row[i])+'</td>\n'
-            else:
-                content +=  '<td>未定義</td>\n'
-        content += '</tr>\n'
+    # ============
+    # SQLの検索操作
+    # ==============
+    if (filepath=="./search"):
+        search_list = [False for _ in range(4)]
+        sql = 'select * from books where author =? and company=?'
+
+        if ('v1' in form):
+            search_list[0] = form.getvalue("v1", "0")
+        if ('v2' in form):
+            search_list[1] = form.getvalue("v2", "0")
+        if ('v3' in form):
+            search_list[2] = form.getvalue("v3", "0")
+        if ('v4' in form):
+            search_list[3] = form.getvalue("v4", "0")
+    
+        
+        cur.execute(sql,(search_list[1],search_list[2]))
+        list1 = cur.fetchall()
+
+        for row in list1:
+            content +=  '<tr>\n'\
+                        '<td class="td1"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
+            for i in range(1, len(row)-2):
+                if not(row[i] is None):
+                    content +=  '<td>'+str(row[i])+'</td>\n'
+                else:
+                    content +=  '<td>未定義</td>\n'
+            content += '</tr>\n'
+
+
+    else:
+        # SQL文（select）の作成
+        sql = 'select * from books'
+
+        # SQL文の実行とその結果のHTML形式への変換
+        for row in cur.execute(sql):
+            content +=  '<tr>\n'\
+                        '<td class="td1"><input type="checkbox"   name="1" value="'+ str(row[0]) +'"></td>\n'
+            for i in range(1, len(row)-2):
+                if not(row[i] is None):
+                    content +=  '<td>'+str(row[i])+'</td>\n'
+                else:
+                    content +=  '<td>未定義</td>\n'
+            content += '</tr>\n'
 
 
     # カーソルと接続を閉じる
     cur.close()
     con.close()
+
 
     html = html.format(body1 = content , title = "本の情報")
     html = html.encode('utf-8')

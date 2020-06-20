@@ -12,14 +12,22 @@
         <input id="TAB-01" type="radio" name="TAB" class="tab-switch" checked="checked" /><label class="tab-label" for="TAB-01">本の一覧・検索</label>
         <div class="tab-content">
             <form>
-                <input type="submit" formaction="delete" value="削除">
+                作品名<input type="text" name="v1"><br>
+                著者<input type="text" name="v2"><br>
+                出版社<input type="text" name="v3"><br>
+                出版年<input type="text" name="v4"><br>
+                <input type="submit" formaction="search" value="検索">
+            </form>
+            <form>
+                <input type="submit" formaction="delete" value="削除" class="btn-gradient-radius">
                 <table rules="none">
                     <thead>
                     <tr>
-                        <th width="25%" scope="col">作品名</th>
-                        <th width="25%" scope="col">著者</th>
-                        <th width="25%" scope="col">出版社</th>
-                        <th width="25%" scope="col">出版年</th>
+                        <th width="4%" scope="col"></th>
+                        <th width="24%" scope="col">作品名</th>
+                        <th width="24%" scope="col">出版社</th>
+                        <th width="24%" scope="col">著者</th>
+                        <th width="24%" scope="col">出版年</th>
                     </tr>
                     </thead>
                 </table>
@@ -45,7 +53,7 @@
                 出版年<input type="text" name="v4"><br>
                 <input type="submit" formaction="add" value="登録">
                 </form>
-                </div>
+            </div>
         </div>
         <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトの説明</label>
         <div class="tab-content">
