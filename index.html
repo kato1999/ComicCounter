@@ -11,13 +11,15 @@
 
     <!-- 検索・削除画面 -->
     <div class="tab-wrap">
-        <input id="TAB-01" type="radio" name="TAB" class="tab-switch" checked="checked" /><label class="tab-label" for="TAB-01">本の一覧・検索</label>
+        <input id="TAB-01" type="radio" name="TAB" class="tab-switch"/><label class="tab-label" for="TAB-01">本の一覧・検索</label>
         <div class="tab-content">
+            <!-- 検索フォーム -->
             <form class="search">
-                    <input type="text" placeholder="検索したい作品名を入力" name="v1">
+                    <input type="text" placeholder="検索したい作品名を入力" name="v1" required>
                     <input type="submit" class="srch_btn button" formaction="search" value="検索">
             </form>
 
+            <!-- 一覧と削除ボタン -->
             <form>
                 <input type="submit" formaction="delete" value="削除" class="button dlt_btn">
                  
@@ -42,14 +44,20 @@
         
 
         <!-- 本の追加 -->
-        <input id="TAB-02" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-02">あああ</label>
+        <input id="TAB-02" type="radio" name="TAB" class="tab-switch"  checked="checked" /><label class="tab-label" for="TAB-02">本の追加</label>
         <div class="tab-content">
             <div class="form1">
-                <form>
-                作品名<input type="text" name="v1"><br>
-                巻数<input type="text" name="v2"><br>
-                コメント<input type="text" name="v3"><br>
-                <input type="submit" formaction="insert" value="登録">
+                <form class="add">
+                    <h4>●作品名<span class="red">(※入力必須)</span></h4>
+                    <input type="text" name="v1" required><br>
+
+                    <h4>●巻数</h4>
+                    <input type="number" name="v2"><br>
+                    
+                    <h4>●コメント</h4>
+                    <textarea name="v3"></textarea><br>
+                    
+                    <input type="submit" class="button add_btn" formaction="insert" value="登録">
                 </form>
             </div>
         </div>
