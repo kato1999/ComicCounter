@@ -75,14 +75,8 @@ def insert_sql(form, start_response):
     cur.close()
     con.close()
 
-    # 一旦別ページ(manage.html)に飛ばす。
-    # リロードした際に重複して追加されるのを防ぐ
-    with open("manage.html",mode="r") as file:
-        html = file.read()
-        html = html.encode('utf-8')
-    start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
-    ('Content-Length', str(len(html))) ])
-    return [html]
+    return refresh(start_response)
+
 
 
 
@@ -104,29 +98,44 @@ def delete_sql(form, start_response):
     cur.close()
     con.close()
 
-    # 一旦別ページ(manage.html)に飛ばす。
-    # リロードした際に重複して削除されるのを防ぐ
-    with open("manage.html",mode="r") as file:
-        html = file.read()
-        html = html.encode('utf-8')
-    start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
-    ('Content-Length', str(len(html))) ])
-    return [html]
+    return refresh(start_response)
+
+
+
+def change_sql(form, start_response):
+    # フォームデータから各フィールド値を取得
+    num = form.getvalue("v0", "0")
+    title = form.getvalue("v1", "0")
+    count = form.getvalue("v2", "0")
+    comment = form.getvalue("v3", "0")
+
+    # データベース接続とカーソル生成
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    con.text_factory = str
+    
+    sql = 'update books set title=?, count=?, comment=? where number=?'
+    cur.execute(sql, (title, count, comment, num))
+    con.commit()
+    cur.close()
+    con.close()
+
+    return refresh(start_response)
 
 
 
 # SQLの検索操作
-def select_sql(form, start_response):
+def select_sql(form):
     content = ""
 
     con = sqlite3.connect(dbname)
     cur = con.cursor()
     con.text_factory = str
 
-    sql = 'select * from books where title =?'
+    sql = 'select * from books where title like ?'
 
-    if ('v1' in form):
-        search = form.getvalue("v1", "0")
+    search = form.getvalue("v1", "0")
+    search = "%"+search+"%"
 
     cur.execute(sql,(search,))
     list1 = cur.fetchall()
@@ -135,18 +144,96 @@ def select_sql(form, start_response):
         content +=  '<tr>\n'\
                     '<td class="td1 box"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
         for i in range(1, len(row)):
-            if not(row[i] is None):
-                content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
-            else:
-                content +=  '<td>未定義</td>\n'
+            content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
+        content += '<td class="td5"><a href="change?v1=' + str(row[0]) + '">変更</a></td>\n'
         content += '</tr>\n'
     cur.close()
     con.close()
 
-    return content
+    show_all = "<a href='manage.html'>検索結果をクリア</a>"
+    sub1 = "検索結果"
+    sub2 = "本の追加"
+    chck1 = "checked='checked'"
+    chck2 = ""
+    btn1 = '<input type="submit" class="button add_btn" formaction="insert" value="登録">'
+
+    with open("index.html",mode="r") as file:
+        html = file.read()
+    html = html.format(body1 = content , title = "本の情報", show_all=show_all,
+                sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
+                checked1=chck1, checked2=chck2,btn1=btn1 )
+
+    return html
 
 
 
+#値を変更するための画面を表示
+def change(form):
+    content = ""
+
+    # nameは1で固定してある。
+    # valueはSQLに保存してある管理番号(number)と同一
+    number = form.getvalue("v1")
+
+    # データベース接続とカーソル生成
+    con = sqlite3.connect(dbname)
+    cur = con.cursor()
+    con.text_factory = str
+    
+    sql = 'select * from books where number = ?'
+    cur.execute(sql, (number,))
+    list1 = cur.fetchall()
+
+    value1 = list1[0][1]
+    value2 = list1[0][2]
+    value3 = list1[0][3]
+
+    sql = 'select * from books'
+
+    # SQL文の実行とその結果のHTML形式への変換
+    # 表の横幅(%)
+    for row in cur.execute(sql):
+        content +=  '<tr>\n'\
+                    '<td class="td1 box"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
+        for i in range(1, len(row)):
+            content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
+        content += '<td class="td5"><a href="change?v1=' + str(row[0]) + '">変更</a></td>\n'
+        content += '</tr>\n'
+
+    cur.close()
+    con.close()
+
+    show_all = ""
+    sub1 = "本の一覧"
+    sub2 = "本情報の変更"
+    chck1 = ""
+    chck2 = "checked='checked'"
+    btn1 = '<input type="submit" class="button add_btn" formaction="change_sql" value="変更">'
+
+    with open("index.html",mode="r") as file:
+        html = file.read()
+    html = html.format(body1 = content , title = "本の情報", show_all=show_all,
+                sub1=sub1, sub2=sub2, value0=list1[0][0], value1=value1, value2=value2, value3=value3,
+                checked1=chck1, checked2=chck2, btn1=btn1)
+    return html
+
+
+
+# 一旦別ページ(manage.html)に飛ばす。
+# リロードした際に重複して追加・削除されるのを防ぐ
+def refresh(start_response):
+    with open("manage.html",mode="r") as file:
+        html = file.read()
+        html = html.encode('utf-8')
+
+    start_response('200 OK', [('Content-Type', 'text/html; charset=utf-8'),
+        ('Content-Length', str(len(html))) ])
+    return [html]
+
+
+
+# localhostにアクセスしたときの処理
+# 本の一覧を表示
 def default():
     content = ""
     con = sqlite3.connect(dbname)
@@ -161,15 +248,26 @@ def default():
         content +=  '<tr>\n'\
                     '<td class="td1 box"><input type="checkbox" name="1" value="'+ str(row[0]) +'"></td>\n'
         for i in range(1, len(row)):
-            if not(row[i] is None):
-                content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
-            else:
-                content +=  '<td>未定義</td>\n'
+            content +=  '<td class="td'+ str(i+1) +'">'+ str(row[i]) +'</td>\n'
+        content += '<td class="td5"><a href="change?v1=' + str(row[0]) + '">変更</a></td>\n'
         content += '</tr>\n'
     cur.close()
     con.close()
 
-    return content
+    show_all = ""
+    sub1 = "本の一覧"
+    sub2 = "本の追加"
+    chck1 = "checked='checked'"
+    chck2 = ""
+    btn1 = '<input type="submit" class="button add_btn" formaction="insert" value="登録">'
+
+    with open("index.html",mode="r") as file:
+        html = file.read()
+    html = html.format(body1=content , title="本の情報", show_all=show_all,
+                sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
+                checked1=chck1, checked2=chck2, btn1=btn1 )
+
+    return html
 
 
 
@@ -196,19 +294,25 @@ def application(environ,start_response):
     elif (filepath=="./delete"):
         return delete_sql(form,start_response)
 
+    # SQLの値変更
+    elif (filepath=="./change_sql"):
+        return change_sql(form,start_response)
+
+    elif (filepath=="./manage.html"):
+        return refresh(start_response)
+
     # SQLの検索操作
     elif (filepath=="./search"):
-        content = select_sql(form, start_response)
+        html = select_sql(form)
+
+    # 値を変更するための画面を生成
+    elif (filepath=="./change"):
+        html = change(form)
 
     # localhostに直接アクセスした場合の処理
     else:
-        content = default()
-
-    # HTML（共通ヘッダ部分）
-    with open("index.html",mode="r") as file:
-        html = file.read()
-
-    html = html.format(body1 = content , title = "本の情報")
+        html = default()
+ 
     html = html.encode('utf-8')
 
     # レスポンス

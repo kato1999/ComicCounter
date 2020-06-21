@@ -9,6 +9,16 @@ h1{
 	text-align: center;
 }
 
+h2{
+	margin: 5px 0px 0px 0px;
+	text-align: center;
+}
+
+h4 {
+	margin-top: 25px;
+	margin-bottom: 0;
+}
+
 
 /* タブ部分のデザイン */
 .tab-wrap {
@@ -76,7 +86,7 @@ h1{
 input[type=text], input[type=number],textarea {
 	font: 15px/24px sans-serif;
 	box-sizing: border-box;
-	width: 70%;
+	width: 50%;
 	margin: 2px 0;
 	padding: 0.3em;
 	padding-left: 15px;
@@ -121,7 +131,7 @@ input[type=text]:focus, input[type=number]:focus, textarea:focus {
 
 .search{
 	margin: 30px 10px 7px 15px;
-	width: 50%;
+	width: 70%;
 	float: left;
 }
 
@@ -167,7 +177,14 @@ table th {
 .td1, .th1{ width: 8%; }
 .th2, .td2{width: 20%;}
 .th3, .td3{width: 10%;}
-.th4, .td4{width: 60%;}
+.th4, .td4{max-width: 60%;}
+.th5, .td5{width: 50px; text-align: center;}
+
+.td5 a{
+	text-decoration: none;
+	font-weight: bold;
+	color: blue;
+}
 
 
 /* チェックボックスのデザイン */
@@ -198,10 +215,6 @@ textarea{
 
 }
 
-h4 {
-	margin-top: 25px;
-	margin-bottom: 0;
-}
 
 .red{
 	color: red;

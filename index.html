@@ -11,12 +11,14 @@
 
     <!-- 検索・削除画面 -->
     <div class="tab-wrap">
-        <input id="TAB-01" type="radio" name="TAB" class="tab-switch"/><label class="tab-label" for="TAB-01">本の一覧・検索</label>
+        <input id="TAB-01" type="radio" name="TAB" class="tab-switch" {checked1}/><label class="tab-label" for="TAB-01">{sub1}</label>
         <div class="tab-content">
             <!-- 検索フォーム -->
+            <h2>{sub1}</h2>
             <form class="search">
                     <input type="text" placeholder="検索したい作品名を入力" name="v1" required>
                     <input type="submit" class="srch_btn button" formaction="search" value="検索">
+                    {show_all}
             </form>
 
             <!-- 一覧と削除ボタン -->
@@ -29,6 +31,7 @@
                         <th class="th2" scope="col">作品名</th>
                         <th class="th3" scope="col">巻数</th>
                         <th class="th4" scope="col">コメント</th>
+                        <th class="th5" scope="col"></th>
                     </tr>
                 </table>
 
@@ -44,20 +47,21 @@
         
 
         <!-- 本の追加 -->
-        <input id="TAB-02" type="radio" name="TAB" class="tab-switch"  checked="checked" /><label class="tab-label" for="TAB-02">本の追加</label>
+        <input id="TAB-02" type="radio" name="TAB" class="tab-switch" {checked2}/><label class="tab-label" for="TAB-02">{sub2}</label>
         <div class="tab-content">
+            <h2>{sub2}</h2>
             <div class="form1">
                 <form class="add">
                     <h4>●作品名<span class="red">(※入力必須)</span></h4>
-                    <input type="text" name="v1" required><br>
+                    <input type="text" name="v1" value="{value1}" required><br>
 
                     <h4>●巻数</h4>
-                    <input type="number" name="v2"><br>
+                    <input type="number" value="{value2}" name="v2"><br>
                     
                     <h4>●コメント</h4>
-                    <textarea name="v3"></textarea><br>
-                    
-                    <input type="submit" class="button add_btn" formaction="insert" value="登録">
+                    <textarea name="v3">{value3}</textarea><br>
+                    {btn1}
+                    <input type="text" hidden name="v0" value="{value0}"><br>
                 </form>
             </div>
         </div>
