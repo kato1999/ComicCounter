@@ -155,13 +155,14 @@ def select_sql(form):
     sub2 = "本の追加"
     chck1 = "checked='checked'"
     chck2 = ""
-    btn1 = '<input type="submit" class="button add_btn" formaction="insert" value="登録">'
+    btn1 = '<input type="submit" class="button chng_btn" formaction="insert" value="登録">'
+    btn2 = ''
 
     with open("index.html",mode="r") as file:
         html = file.read()
     html = html.format(body1 = content , title = "本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
-                checked1=chck1, checked2=chck2,btn1=btn1 )
+                checked1=chck1, checked2=chck2,btn1=btn1, btn2=btn2 )
 
     return html
 
@@ -208,13 +209,15 @@ def change(form):
     sub2 = "本情報の変更"
     chck1 = ""
     chck2 = "checked='checked'"
-    btn1 = '<input type="submit" class="button add_btn" formaction="change_sql" value="変更">'
+    btn1 = '<input type="submit" class="button chng_btn" formaction="change_sql" value="変更">'
+    btn2 = '<input type="submit" class="button cancel_btn" formaction="manage.html" value="キャンセル">'
+
 
     with open("index.html",mode="r") as file:
         html = file.read()
     html = html.format(body1 = content , title = "本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0=list1[0][0], value1=value1, value2=value2, value3=value3,
-                checked1=chck1, checked2=chck2, btn1=btn1)
+                checked1=chck1, checked2=chck2, btn1=btn1, btn2=btn2)
     return html
 
 
@@ -259,13 +262,14 @@ def default():
     sub2 = "本の追加"
     chck1 = "checked='checked'"
     chck2 = ""
-    btn1 = '<input type="submit" class="button add_btn" formaction="insert" value="登録">'
+    btn1 = '<input type="submit" class="button chng_btn" formaction="insert" value="登録">'
+    btn2 = ''
 
     with open("index.html",mode="r") as file:
         html = file.read()
     html = html.format(body1=content , title="本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
-                checked1=chck1, checked2=chck2, btn1=btn1 )
+                checked1=chck1, checked2=chck2, btn1=btn1, btn2=btn2 )
 
     return html
 
