@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
 body{
 	background-color: rgb(226, 255, 224);
 	font-family: sans-serif;
@@ -5,8 +7,12 @@ body{
 	/* height: 1000px; */
 }
 
+
 h1{
 	text-align: center;
+	font-family: 'Pacifico', cursive;
+	font-size: 50px;
+	color: rgb(104, 67, 0);
 }
 
 h2{
@@ -18,6 +24,7 @@ h4 {
 	margin-top: 25px;
 	margin-bottom: 0;
 }
+
 
 
 /* タブ部分のデザイン */
@@ -82,6 +89,7 @@ h4 {
 
 
 
+
 /* 入力ボックスのデザイン */
 input[type=text], input[type=number],textarea {
 	font: 15px/24px sans-serif;
@@ -107,6 +115,7 @@ input[type=text]:focus, input[type=number]:focus, textarea:focus {
 }
 
 
+
 /* ボタンデザイン */
 .button{
 	font-size: 17px;
@@ -129,7 +138,7 @@ input[type=text]:focus, input[type=number]:focus, textarea:focus {
 }
 
 .chng_btn{
-	background-color: green; 
+	background-color: rgb(255, 182, 47); 
 	margin:10px 10px 5px auto;
 	float: right;
 }
@@ -174,7 +183,7 @@ table tr:nth-child(even){
 
 table td{
 	padding: .35em 1em;
-	border-width: 3px; /* 線の太さ */
+	border-width: 3px;
 }
 
 table th {
@@ -196,6 +205,7 @@ table th {
 	font-weight: bold;
 	color: blue;
 }
+
 
 
 /* チェックボックスのデザイン */
@@ -226,7 +236,6 @@ textarea{
 
 }
 
-
 .red{
 	color: red;
 	font-size: 12px;
@@ -234,12 +243,20 @@ textarea{
 }
 
 
+/* サイトの説明部分のデザイン */
+.explain{
+	margin: 50px auto;
+	max-width: 80%;
+}
 
+.explain_content1, .explain_content2{
+	margin-left: 20px;
+	margin-bottom: 80px;
+	font-size: 17px;
+}
 
-  
-
-
-
-
+.explain_content2{
+	margin-bottom: 40px;
+}
 
 

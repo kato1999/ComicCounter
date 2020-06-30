@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="app.css">
 </head>
 <body>
-    <h1>本の管理</h1>
+    <h1>Comic memo</h1>
 
 
     <!-- 検索・削除画面 -->
@@ -28,7 +28,7 @@
                         <th class="th1" scope="col"></th>
                         <th class="th2" scope="col">作品名</th>
                         <th class="th3" scope="col">巻数</th>
-                        <th class="th4" scope="col">コメント</th>
+                        <th class="th4" scope="col">メモ</th>
                         <th class="th5" scope="col"></th>
                     </tr>
                 </table>
@@ -58,7 +58,7 @@
                     <h4>●巻数</h4>
                     <input type="number" value="{value2}" name="v2"><br>
                     
-                    <h4>●コメント</h4>
+                    <h4>●メモ</h4>
                     <textarea name="v3">{value3}</textarea><br>
                     {btn2}
                     {btn1}
@@ -69,9 +69,34 @@
 
 
         <!-- サイトの説明 -->
-        <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトについて</label>
+        <input id="TAB-03" type="radio" name="TAB" class="tab-switch" /><label class="tab-label" for="TAB-03">このサイトについて・利用方法</label>
         <div class="tab-content">
-            aaa
+            <h2>このサイトについて・利用方法</h2>
+            <div class=explain>
+                <h3>サイトの説明</h3>
+                <div class=explain_content1>
+                    　このサイトでは漫画を何巻まで購入したかをメモしておくことができ、漫画購入時に重複購入や巻を飛ばしての購入を防ぐことができます。
+                    感想などの情報をメモしておくことも可能です。<br>
+                    　また、「巻数」の部分を「ページ数」に読み替えて使用することで、何ページまで読んだを管理することができるため、しおり代わりにも使用可能です。<br>
+                </div>
+                <h3>サイトの利用方法</h3>
+                <h4>本の追加</h4>
+                <div class=explain_content2>
+                    　上部のタブにある「本の追加」を選択し、表示される「タイトル」、「巻数」、「メモ」の欄に情報を記入した上で「登録」のボタンを押してください。
+                    タイトルのみ入力必須です。
+                </div> 
+                <h4>情報の変更</h4>
+                <div class=explain_content2>
+                    　上部のタブにある「本の一覧」または「検索結果」を選択し、表示される表の中から情報を変更したい本を見つけます。
+                    その本の一番右にある「変更」の文字を押すと変更するための画面がでてくるため、そこで情報を編集し、変更ボタンを押してください。
+                    なお、変更をやめる場合にはキャンセルボタンを押してください。
+                </div> 
+                <h4>本の消去</h4>
+                <div class=explain_content2>
+                    　上部のタブにある「本の一覧」または「検索結果」を選択し、表示される表の中から情報を変更したい本を見つけます。
+                    その本の一番左にあるチェックボックスにチェックを入れてください。そして、「削除」ボタンを押すと本の情報が消去されます。
+                </div>
+            </div>
         </div>
     </div>
 
