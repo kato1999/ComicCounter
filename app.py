@@ -337,6 +337,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
 
-    server = simple_server.make_server('', port, application)
+    server = simple_server.make_server(host='0.0.0.0', port=int(os.environ.get('PORT', port)) , application)
     server.serve_forever()
 
