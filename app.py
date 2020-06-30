@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import os
 import sys
 
 import pathlib
@@ -274,7 +275,7 @@ def default():
     return html
 
 
-@route("/")
+
 def application(environ,start_response):
     # ファイル名取得
     filepath = '.' + environ['PATH_INFO']
@@ -337,6 +338,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
 
-    server = simple_server.make_server(host='0.0.0.0', port=int(os.environ.get('PORT', port)) , application)
+    server = simple_server.make_server('0.0.0.0', int(os.environ.get('PORT', 5000)), application)
     server.serve_forever()
 
