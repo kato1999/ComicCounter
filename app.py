@@ -274,7 +274,7 @@ def default():
     return html
 
 
-
+@route("/")
 def application(environ,start_response):
     # ファイル名取得
     filepath = '.' + environ['PATH_INFO']
