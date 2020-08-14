@@ -159,7 +159,7 @@ def select_sql(form):
     btn1 = '<input type="submit" class="button chng_btn" formaction="insert" value="登録">'
     btn2 = ''
 
-    with open("index.html",mode="r") as file:
+    with open("index.html",mode="r",encoding="utf-8_sig") as file:
         html = file.read()
     html = html.format(body1 = content , title = "本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
@@ -214,7 +214,7 @@ def change(form):
     btn2 = '<input type="submit" class="button cancel_btn" formaction="manage.html" value="キャンセル">'
 
 
-    with open("index.html",mode="r") as file:
+    with open("index.html",mode="r",encoding="utf-8_sig") as file:
         html = file.read()
     html = html.format(body1 = content , title = "本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0=list1[0][0], value1=value1, value2=value2, value3=value3,
@@ -226,7 +226,7 @@ def change(form):
 # 一旦別ページ(manage.html)に飛ばす。
 # リロードした際に重複して追加・削除されるのを防ぐ
 def refresh(start_response):
-    with open("manage.html",mode="r") as file:
+    with open("manage.html",mode="r",encoding="utf-8_sig") as file:
         html = file.read()
         html = html.encode('utf-8')
 
@@ -266,7 +266,7 @@ def default():
     btn1 = '<input type="submit" class="button chng_btn" formaction="insert" value="登録">'
     btn2 = ''
 
-    with open("index.html",mode="r") as file:
+    with open("index.html",mode="r",encoding="utf-8_sig") as file:
         html = file.read()
     html = html.format(body1=content , title="本の情報", show_all=show_all,
                 sub1=sub1, sub2=sub2, value0="", value1="", value2="", value3="",
@@ -338,6 +338,6 @@ if __name__ == '__main__':
     if len(sys.argv) == 2:
         port = int(sys.argv[1])
 
-    server = simple_server.make_server('0.0.0.0', int(os.environ.get('PORT', 5000)), application)
+    server = simple_server.make_server('', port, application)
     server.serve_forever()
 
